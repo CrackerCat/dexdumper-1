@@ -24,7 +24,6 @@ class Dumper : IXposedHookLoadPackage {
         }
         context!!.contentResolver
     }
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam?) {
         EzXHelperInit.initHandleLoadPackage(lpparam!!)
@@ -53,7 +52,7 @@ class Dumper : IXposedHookLoadPackage {
     }
 
     private fun saveDexAsync(dex: ByteArray, saveName: String) {
-        coroutineScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             contentResolver.openOutputStream(
                 contentResolver.insert(
                     MediaStore.Downloads.EXTERNAL_CONTENT_URI,
