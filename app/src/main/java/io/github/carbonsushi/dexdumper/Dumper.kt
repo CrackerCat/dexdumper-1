@@ -5,7 +5,8 @@ import android.content.Context
 import android.provider.MediaStore
 import androidx.core.content.contentValuesOf
 import com.github.kyuubiran.ezxhelper.init.EzXHelperInit
-import com.github.kyuubiran.ezxhelper.utils.*
+import com.github.kyuubiran.ezxhelper.utils.findMethod
+import com.github.kyuubiran.ezxhelper.utils.hookBefore
 import dalvik.system.DexFile
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.SELinuxHelper
@@ -42,7 +43,10 @@ class Dumper : IXposedHookLoadPackage {
                 val byteArray = ByteArray(byteBuffer.capacity())
                 byteBuffer.rewind()
                 byteBuffer.get(byteArray)
-                saveDexAsync(byteArray, "${lpparam.packageName}_openInMemoryDexFiles.dex")
+                saveDexAsync(
+                    byteArray,
+                    "${lpparam.packageName}_${byteArray.contentHashCode()}.dex"
+                )
             }
         }
     }
